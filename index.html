@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="shortcut icon" href="pictures/" type="image/x-icon">
 <style>
+  
   :root {
     --gold: #C9934A; --gold-light: #E8C48A; --plum: #4A1942; --plum-mid: #7B3D7A;
     --blush: #F2C4CE; --blush-light: #FDF0F3; --cream: #FAF6F0; --rose: #E8768A; --deep: #1A0A1A;
@@ -551,5 +552,120 @@ function filterCards(cat, btn) {
   });
 }
 </script>
+<!-- ✦ EID MUBARAK BANNER — Remove this entire block after Eid ✦ -->
+<style>
+  #eid-overlay {
+    position: fixed; inset: 0; z-index: 9999; pointer-events: none; overflow: hidden;
+  }
+  #eid-banner {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10000;
+    background: linear-gradient(135deg, #4A1942 0%, #7B2A6A 50%, #C9934A 100%);
+    color: #fff; text-align: center; padding: 0; pointer-events: auto;
+    height: 0; overflow: hidden; transition: height 0.5s ease;
+  }
+  #eid-banner.show { height: 52px; }
+  #eid-banner-inner {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    height: 52px; padding: 0 1rem;
+  }
+  .eid-moon { font-size: 1.3rem; animation: eid-glow 2s ease-in-out infinite alternate; }
+  @keyframes eid-glow {
+    from { filter: drop-shadow(0 0 4px #E8C48A); }
+    to   { filter: drop-shadow(0 0 12px #E8C48A) drop-shadow(0 0 20px #C9934A); }
+  }
+  #eid-text {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700;
+    font-style: italic; letter-spacing: 0.06em; color: #E8C48A;
+    animation: eid-shimmer 3s ease-in-out infinite;
+  }
+  @keyframes eid-shimmer {
+    0%, 100% { color: #E8C48A; }
+    50%       { color: #fff; }
+  }
+  #eid-sub {
+    font-family: 'DM Sans', sans-serif; font-size: 0.7rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: rgba(255,255,255,0.7);
+  }
+  #eid-close {
+    position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+    color: #fff; border-radius: 50%; width: 28px; height: 28px; font-size: 0.75rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s; font-family: sans-serif; line-height: 1;
+  }
+  #eid-close:hover { background: rgba(255,255,255,0.3); }
+  .eid-star {
+    position: fixed; border-radius: 50%; background: #E8C48A;
+    pointer-events: none; animation: eid-twinkle ease-in-out infinite alternate;
+  }
+  @keyframes eid-twinkle {
+    from { opacity: 0.15; transform: scale(0.8); }
+    to   { opacity: 0.8;  transform: scale(1.2); }
+  }
+  .eid-confetti {
+    position: fixed; width: 8px; height: 8px; border-radius: 2px;
+    pointer-events: none; animation: eid-fall linear infinite; top: -10px;
+  }
+  @keyframes eid-fall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+    80%  { opacity: 0.7; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+  .eid-lantern {
+    position: fixed; font-size: 1.6rem; pointer-events: none;
+    animation: eid-sway ease-in-out infinite alternate; top: 55px;
+  }
+  @keyframes eid-sway {
+    from { transform: rotate(-8deg) translateY(0px); }
+    to   { transform: rotate(8deg)  translateY(-6px); }
+  }
+</style>
+
+<div id="eid-overlay"></div>
+
+<div id="eid-banner">
+  <div id="eid-banner-inner">
+    <span class="eid-moon">☪️</span>
+    <span id="eid-text">Eid Mubarak</span>
+    <span id="eid-sub">— From Z'heart Glam Empire —</span>
+    <span class="eid-moon">☪️</span>
+  </div>
+  <button id="eid-close" onclick="document.getElementById('eid-banner').classList.remove('show')" title="Close">✕</button>
+</div>
+
+<script>
+(function() {
+  setTimeout(function() {
+    document.getElementById('eid-banner').classList.add('show');
+  }, 600);
+
+  const overlay = document.getElementById('eid-overlay');
+  const colors = ['#C9934A','#E8C48A','#F2C4CE','#7B3D7A','#E8768A','#fff'];
+
+  for (let i = 0; i < 18; i++) {
+    const s = document.createElement('div');
+    s.className = 'eid-star';
+    const size = Math.random() * 4 + 2;
+    s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}vw;top:${Math.random()*100}vh;animation-duration:${1.5+Math.random()*2.5}s;animation-delay:${Math.random()*3}s;`;
+    overlay.appendChild(s);
+  }
+
+  for (let i = 0; i < 22; i++) {
+    const c = document.createElement('div');
+    c.className = 'eid-confetti';
+    c.style.cssText = `left:${Math.random()*100}vw;background:${colors[Math.floor(Math.random()*colors.length)]};width:${5+Math.random()*7}px;height:${5+Math.random()*7}px;animation-duration:${4+Math.random()*6}s;animation-delay:${Math.random()*8}s;border-radius:${Math.random()>0.5?'50%':'2px'};`;
+    overlay.appendChild(c);
+  }
+
+  ['🪔','🌙','✨','🪔','🌙'].forEach(function(e, i) {
+    const l = document.createElement('div');
+    l.className = 'eid-lantern';
+    l.textContent = e;
+    l.style.cssText = `left:${8+i*22}vw;animation-duration:${2+Math.random()*1.5}s;animation-delay:${Math.random()*1.5}s;`;
+    overlay.appendChild(l);
+  });
+})();
+</script>
+<!-- ✦ END EID MUBARAK BLOCK ✦ -->
 </body>
 </html>
