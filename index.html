@@ -513,17 +513,48 @@ function buildCard(p, i) {
     '</div></div>';
 }
 
+// ── Google Sheets integration ──────────────────────────────────────────────
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbzZ70FHG_Ap44bJYcJ5gspzErqNyLuPyvqlMlQgsba0-yk9kzcgJe-3nVEwht0kl69t/exec";
+
+// Render original products immediately so the page never looks empty
 document.getElementById('productGrid').innerHTML = products.map(buildCard).join('');
 
-document.querySelectorAll('.card-wish').forEach(btn => {
-  btn.addEventListener('click', function() {
-    const icon = this.querySelector('i');
-    icon.classList.toggle('fa-regular');
-    icon.classList.toggle('fa-solid');
-    this.style.background = icon.classList.contains('fa-solid') ? 'var(--rose)' : 'rgba(255,255,255,.9)';
-    icon.style.color = icon.classList.contains('fa-solid') ? '#fff' : 'var(--rose)';
+function attachWishlistListeners() {
+  document.querySelectorAll('.card-wish').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const icon = this.querySelector('i');
+      icon.classList.toggle('fa-regular');
+      icon.classList.toggle('fa-solid');
+      this.style.background = icon.classList.contains('fa-solid') ? 'var(--rose)' : 'rgba(255,255,255,.9)';
+      icon.style.color = icon.classList.contains('fa-solid') ? '#fff' : 'var(--rose)';
+    });
   });
-});
+}
+
+attachWishlistListeners();
+
+// Fetch custom products from Google Sheet and append them
+fetch(SHEET_URL)
+  .then(r => r.json())
+  .then(function(custom) {
+    if (custom && custom.length) {
+      custom.forEach(function(p) {
+        products.push({
+          name: p.name,
+          cat: p.cat,
+          stars: parseFloat(p.stars),
+          reviews: parseInt(p.reviews),
+          img: p.img
+        });
+      });
+      document.getElementById('productGrid').innerHTML = products.map(buildCard).join('');
+      attachWishlistListeners();
+    }
+  })
+  .catch(function() {
+    // Sheet unavailable — original products remain visible, no error shown to user
+  });
+// ── End Google Sheets integration ─────────────────────────────────────────
 
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
